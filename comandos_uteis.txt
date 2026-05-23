@@ -1,0 +1,24 @@
+
+# NODE
+# Verificar se o node já está instalado no PC
+node --version
+
+
+# NEXT
+# Gerar projeto com NextJs -> requer node >20
+npx create-next-app@latest web2
+
+# ANGULAR
+ng version
+# Se quiser ter a CLI do angular instalada na máquina
+npm install -g @angular/cli
+
+# Gerar o projeto Angular (com a CLI global instalada)
+ng new web
+
+OU
+
+# Se quiser utilizar temporariamente
+npx -y @angular/cli@latest --version
+
+npx -y @angular/cli@latest new web --routing=true --style=css --skip-git --defaults
