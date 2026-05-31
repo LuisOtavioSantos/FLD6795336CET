@@ -39,9 +39,15 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         </div>
         
-        <p className="text-sm text-muted-foreground line-clamp-3 mb-4 flex-1">
+        <p className="text-sm text-muted-foreground line-clamp-3 mb-2 flex-1">
           {product.description}
         </p>
+        
+        {product.vendorName && (
+          <p className="text-xs font-semibold text-muted-foreground mb-4">
+            Vendido por: <span className="text-foreground">{product.vendorName}</span>
+          </p>
+        )}
         
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
           <span className="text-2xl font-black">

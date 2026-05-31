@@ -3,18 +3,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormData } from "@/validations/auth.schema";
-import { useAuthStore } from "@/store/useAuthStore";
 import { api } from "@/services/api";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Loader2, UserPlus } from "lucide-react";
+import { Loader2, UserPlus, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 
 export default function CadastroPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const login = useAuthStore((state) => state.login);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const {
@@ -32,17 +31,13 @@ export default function CadastroPage() {
       const payload = { ...data, role: "CLIENT" };
       const response = await api.post("/auth/register", payload);
 
-      // Salva o usuário no Zustand após o registro bem-sucedido
-      login({
-        id: response.data.id || 1,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        role: "CLIENT",
-      });
-
-      toast.success("Conta criada com sucesso! Bem-vindo(a)!");
-      router.push("/");
+      // NÃO logamos o usuário automaticamente!
+      // A conta precisa ser verificada via e-mail antes do primeiro login.
+      toast.info(
+        "📧 Conta criada! Verifique seu e-mail para ativar sua conta antes de fazer login.",
+        { autoClose: 8000 }
+      );
+      router.push("/signin");
     } catch (error: unknown) {
       if (isAxiosError(error) && error.response?.status === 400) {
         toast.error("Este e-mail já está cadastrado.");
@@ -150,18 +145,27 @@ export default function CadastroPage() {
             <label className="block text-sm font-medium mb-1" htmlFor="password">
               Senha
             </label>
-            <input
-              {...register("password")}
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              className={`w-full p-3 rounded-lg border bg-background transition-colors focus:outline-none focus:ring-2 ${
-                errors.password
-                  ? "border-destructive focus:ring-destructive/20"
-                  : "border-border focus:ring-primary/20 focus:border-primary"
-              }`}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                {...register("password")}
+                id="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                className={`w-full p-3 pr-10 rounded-lg border bg-background transition-colors focus:outline-none focus:ring-2 ${
+                  errors.password
+                    ? "border-destructive focus:ring-destructive/20"
+                    : "border-border focus:ring-primary/20 focus:border-primary"
+                }`}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
             {errors.password && (
               <span className="text-xs text-destructive mt-1 block">
                 {errors.password.message}

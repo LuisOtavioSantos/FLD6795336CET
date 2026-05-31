@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function CarrinhoPage() {
-  const { items, removeItem, totalPrice, totalItems } = useCartStore();
+  const { items, removeItem, totalPrice, totalItems, clearCart } = useCartStore();
   const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
 
@@ -20,6 +20,7 @@ export default function CarrinhoPage() {
     }
     
     toast.success(`Pedido realizado com sucesso, ${user?.firstName}!`);
+    clearCart();
     // Aqui você enviaria os itens para o backend (/purchases) via Axios
   };
 

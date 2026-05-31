@@ -5,4 +5,6 @@ export interface Product {
   price: number;
   category: string;
   imageUrl?: string;
+  vendorId?: number;
+  vendorName?: string;
 }

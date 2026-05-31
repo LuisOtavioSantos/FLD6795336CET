@@ -44,6 +44,29 @@ export function Header() {
             <div className="w-20 h-5 bg-muted rounded animate-pulse"></div>
           ) : isAuthenticated ? (
             <div className="flex items-center gap-4">
+              {user?.role === "VENDOR" || user?.role === "ADMIN" ? (
+                <Link href="/vendor/dashboard" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+                  Painel do Vendedor
+                </Link>
+              ) : (
+                <button 
+                  onClick={async () => {
+                    try {
+                      const { api } = await import('@/services/api');
+                      const { toast } = await import('react-toastify');
+                      await api.post('/user/become-vendor');
+                      useAuthStore.getState().updateUser({ role: 'VENDOR' });
+                      toast.success('Parabéns! Agora você é um Vendedor.');
+                    } catch(e) {
+                      const { toast } = await import('react-toastify');
+                      toast.error('Erro ao se tornar vendedor.');
+                    }
+                  }}
+                  className="text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                >
+                  Quero Vender
+                </button>
+              )}
               <span className="text-sm font-medium flex items-center gap-2">
                 <User className="w-4 h-4" />
                 <span className="hidden sm:inline">Olá, {user?.firstName}</span>

@@ -132,9 +132,15 @@ export default function ProdutoDetalhesPage({ params }: { params: Promise<{ id: 
           </div>
           <h1 className="text-4xl font-black mb-4">{product.name}</h1>
           
-          <div className="text-3xl font-bold text-primary mb-6">
+          <div className="text-3xl font-bold text-primary mb-2">
             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
           </div>
+
+          {product.vendorName && (
+            <div className="text-sm text-muted-foreground mb-6 font-medium">
+              Vendido e entregue por: <span className="font-bold text-foreground">{product.vendorName}</span>
+            </div>
+          )}
           
           <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
             {product.description}
